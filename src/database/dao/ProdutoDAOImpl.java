@@ -1,6 +1,7 @@
 package database.dao;
 
 import database.Conexao;
+import database.OperationException;
 import domain.Fornecedor;
 import domain.Produto;
 
@@ -8,6 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe utilizada para executar as operações no banco de dados,
+ * que envolvem o Produto.
+ */
 public class ProdutoDAOImpl implements ProdutoDAO{
     @Override
     public void incluir(Produto produto, int id_loja) {
@@ -24,17 +29,17 @@ public class ProdutoDAOImpl implements ProdutoDAO{
     }
 
     @Override
-    public Produto consultar(int id) {
+    public Produto consultar(int id) throws OperationException {
         Conexao conexao = new Conexao();
         Produto produto = null;
         try {
-            String consulta = "SELECT * FROM PRODUTO WHERE id_forn = '" + id + "'";
+            String consulta = "SELECT * FROM PRODUTO WHERE id_prod = '" + id + "'";
             ResultSet rs = conexao.executarConsulta(consulta);
 
             if(rs.next())
                 produto = construirProduto(rs, id);
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados do Produto.");
+            throw new OperationException("Produto", "Consultar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -43,7 +48,7 @@ public class ProdutoDAOImpl implements ProdutoDAO{
     }
 
     @Override
-    public ArrayList<Produto> listar() {
+    public ArrayList<Produto> listar() throws OperationException {
         Conexao conexao = new Conexao();
         ArrayList<Produto> produtos = new ArrayList<>();
         try {
@@ -51,13 +56,13 @@ public class ProdutoDAOImpl implements ProdutoDAO{
             ResultSet rs = conexao.executarConsulta(consulta);
 
             while(rs.next()) {
-                int id = rs.getInt("id_forn");
+                int id = rs.getInt("id_prod");
                 Produto produto = construirProduto(rs, id);
                 produtos.add(produto);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println("Nao conseguiu consultar os dados do Produto.");
+            throw new OperationException("Produto", "Listar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -66,7 +71,7 @@ public class ProdutoDAOImpl implements ProdutoDAO{
     }
 
     @Override
-    public ArrayList<Produto> listarProdutosPorLoja(int id_loja) {
+    public ArrayList<Produto> listarProdutosPorLoja(int id_loja) throws OperationException {
         Conexao conexao = new Conexao();
         ArrayList<Produto> produtos = new ArrayList<>();
         try {
@@ -79,7 +84,7 @@ public class ProdutoDAOImpl implements ProdutoDAO{
                 produtos.add(produto);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados do Produto.");
+            throw new OperationException("Produto", "Listar por Loja", ex);
         } finally {
             conexao.desconectar();
         }
@@ -102,7 +107,7 @@ public class ProdutoDAOImpl implements ProdutoDAO{
 
     @Override
     public void excluir(int id) {
-        String delete = "DELETE FROM PRODUTO WHERE id_loc='" + id + "'";
+        String delete = "DELETE FROM PRODUTO WHERE id_prod='" + id + "'";
 
         Conexao conexao = new Conexao();
         conexao.executarDML(delete);

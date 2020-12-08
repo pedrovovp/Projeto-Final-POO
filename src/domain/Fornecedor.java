@@ -1,5 +1,6 @@
 package domain;
 
+/** Classe que agrupa os dados do Objeto Fornecedor */
 public class Fornecedor {
     private int id;
     static int contadorFornecedor = 0;

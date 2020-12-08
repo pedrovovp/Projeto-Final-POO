@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 
+/** Classe que agrupa os dados do Objeto Loja */
 public class Loja {
     private int id;
     private String nome;

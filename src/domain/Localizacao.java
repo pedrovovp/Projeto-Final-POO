@@ -1,5 +1,6 @@
 package domain;
 
+/** Classe que agrupa os dados do Objeto Localizacao */
 public class Localizacao {
     private int id;
     static int contadorLocalizacao = 0;

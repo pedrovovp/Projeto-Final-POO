@@ -1,5 +1,6 @@
 package domain;
 
+/** Classe que agrupa os dados do Objeto Produto */
 public class Produto {
     private int id;
     static int contadorProduto = 0;

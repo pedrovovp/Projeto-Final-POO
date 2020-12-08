@@ -1,6 +1,7 @@
 package database.dao;
 
 import database.Conexao;
+import database.OperationException;
 import domain.Localizacao;
 import domain.Loja;
 import domain.Produto;
@@ -9,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe utilizada para executar as operações no banco de dados,
+ * que envolvem o Loja.
+ */
 public class LojaDAOImpl implements InterfaceDAO<Loja>{
     @Override
     public void incluir(Loja loja) {
@@ -21,7 +26,7 @@ public class LojaDAOImpl implements InterfaceDAO<Loja>{
     }
 
     @Override
-    public Loja consultar(int id) {
+    public Loja consultar(int id) throws OperationException {
         Conexao conexao = new Conexao();
         Loja loja = null;
         try {
@@ -43,7 +48,7 @@ public class LojaDAOImpl implements InterfaceDAO<Loja>{
                 loja.setId(id);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados da Loja.");
+            throw new OperationException("Loja", "Consultar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -52,7 +57,7 @@ public class LojaDAOImpl implements InterfaceDAO<Loja>{
     }
 
     @Override
-    public ArrayList<Loja> listar() {
+    public ArrayList<Loja> listar() throws OperationException {
         Conexao conexao = new Conexao();
         ArrayList<Loja> lojas = new ArrayList<>();
         try {
@@ -76,7 +81,7 @@ public class LojaDAOImpl implements InterfaceDAO<Loja>{
                 lojas.add(loja);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados da Loja.");
+            throw new OperationException("Loja", "Listar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -96,7 +101,7 @@ public class LojaDAOImpl implements InterfaceDAO<Loja>{
 
     @Override
     public void excluir(int id) {
-        String delete = "DELETE FROM LOJA WHERE id_loc='" + id + "'";
+        String delete = "DELETE FROM LOJA WHERE id_loja='" + id + "'";
 
         Conexao conexao = new Conexao();
         conexao.executarDML(delete);

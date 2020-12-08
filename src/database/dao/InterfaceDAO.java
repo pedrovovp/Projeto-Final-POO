@@ -1,16 +1,18 @@
 package database.dao;
 
+import database.OperationException;
+
 import java.util.ArrayList;
 
 public interface InterfaceDAO<T> {
 
-    public void incluir(T obj);
+    void incluir(T obj);
 
-    public void alterar(T obj);
+    void alterar(T obj);
 
-    public T consultar(int id);
+    T consultar(int id) throws OperationException;
 
-    public ArrayList<T> listar();
+    ArrayList<T> listar() throws OperationException;
 
-    public void excluir(int id);
+    void excluir(int id);
 }

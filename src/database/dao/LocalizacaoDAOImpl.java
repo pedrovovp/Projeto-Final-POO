@@ -1,13 +1,18 @@
 package database.dao;
 
 import database.Conexao;
+import database.OperationException;
 import domain.Localizacao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class LocalizacaoDAOImpl implements LocalizacaoDAO {
+/**
+ * Classe utilizada para executar as operações no banco de dados,
+ * que envolvem a Localizacao.
+ */
+public class LocalizacaoDAOImpl implements InterfaceDAO<Localizacao> {
     public void incluir(Localizacao localizacao) {
         String incluir = "INSERT INTO LOCALIZACAO VALUES (" + localizacao.getId() + ", '"
                 + localizacao.getEstado() + "', '"
@@ -19,7 +24,7 @@ public class LocalizacaoDAOImpl implements LocalizacaoDAO {
         conexao.executarDML(incluir);
     }
 
-    public Localizacao consultar(int id) {
+    public Localizacao consultar(int id) throws OperationException {
         Conexao conexao = new Conexao();
         Localizacao localizacao = null;
         try {
@@ -35,7 +40,7 @@ public class LocalizacaoDAOImpl implements LocalizacaoDAO {
                 localizacao.setId(id);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados da Localizacao.");
+            throw new OperationException("Localizacao", "Consultar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -43,7 +48,7 @@ public class LocalizacaoDAOImpl implements LocalizacaoDAO {
         return localizacao;
     }
 
-    public ArrayList<Localizacao> listar() {
+    public ArrayList<Localizacao> listar() throws OperationException {
         Conexao conexao = new Conexao();
         ArrayList<Localizacao> localizacoes = new ArrayList<>();
         try {
@@ -62,7 +67,7 @@ public class LocalizacaoDAOImpl implements LocalizacaoDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println("Nao conseguiu consultar os dados da Localizacao.");
+            throw new OperationException("Localizacao", "Listar", ex);
         } finally {
             conexao.desconectar();
         }

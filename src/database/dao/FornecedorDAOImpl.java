@@ -1,6 +1,7 @@
 package database.dao;
 
 import database.Conexao;
+import database.OperationException;
 import domain.Fornecedor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Classe utilizada para executar as operações no banco de dados,
- * que envolvem o Carro.
+ * que envolvem o Fornecedor.
  */
 public class FornecedorDAOImpl implements InterfaceDAO<Fornecedor> {
     public void incluir(Fornecedor fornecedor) {
@@ -21,7 +22,7 @@ public class FornecedorDAOImpl implements InterfaceDAO<Fornecedor> {
         conexao.executarDML(incluir);
     }
 
-    public Fornecedor consultar(int id) {
+    public Fornecedor consultar(int id) throws OperationException {
         Conexao conexao = new Conexao();
         Fornecedor fornecedor = null;
         try {
@@ -36,7 +37,7 @@ public class FornecedorDAOImpl implements InterfaceDAO<Fornecedor> {
                 fornecedor.setId(id);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados do Fornecedor.");
+            throw new OperationException("Fornecedor", "Consultar", ex);
         } finally {
             conexao.desconectar();
         }
@@ -44,7 +45,7 @@ public class FornecedorDAOImpl implements InterfaceDAO<Fornecedor> {
         return fornecedor;
     }
 
-    public ArrayList<Fornecedor> listar() {
+    public ArrayList<Fornecedor> listar() throws OperationException {
         Conexao conexao = new Conexao();
         ArrayList<Fornecedor> fornecedores = new ArrayList<>();
         try {
@@ -61,7 +62,7 @@ public class FornecedorDAOImpl implements InterfaceDAO<Fornecedor> {
                 fornecedores.add(fornecedor);
             }
         } catch (SQLException ex) {
-            System.out.println("Nao conseguiu consultar os dados do Fornecedor.");
+            throw new OperationException("Fornecedor", "Listar", ex);
         } finally {
             conexao.desconectar();
         }

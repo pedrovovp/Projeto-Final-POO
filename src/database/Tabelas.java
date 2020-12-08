@@ -1,5 +1,7 @@
 package database;
 
+/** Classe quea agrupa os comandos SQL para criar as tabelas*/
+
 public class Tabelas {
     private String localizacao = "CREATE TABLE localizacao(\n" +
             "id_loc int PRIMARY KEY NOT NULL,\n" +
@@ -29,6 +31,7 @@ public class Tabelas {
             "id_loja int REFERENCES loja(id_loja) ON DELETE CASCADE,\n" +
             "id_forn int REFERENCES Fornecedor(id_forn) ON DELETE CASCADE);";
 
+    /** Método que cria a tabela */
     public void criarTabelas() {
         Conexao conn = new Conexao();
         conn.criarTabela(localizacao+fornecedor+loja+produto);
